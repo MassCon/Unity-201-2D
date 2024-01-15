@@ -8,11 +8,13 @@ public class BirdScript : MonoBehaviour
     private float forceFactor = 250f;
 
     private float continualForceFactor = 1000f;
+    //private int pipesPassed;
 
     // Start is called before the first frame update
     void Start()
     {
         body = this.GetComponent<Rigidbody2D>();
+        GameState.pipesPassed = 0;
     }
 
     // Update is called once per frame
@@ -36,5 +38,13 @@ public class BirdScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Trigger detected: " + collision.gameObject.name);
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        // Debug.Log(other.gameObject.tag);
+        if (other.gameObject.CompareTag("Pipe"))
+        {
+            GameState.pipesPassed += 1;
+        }
     }
 }
