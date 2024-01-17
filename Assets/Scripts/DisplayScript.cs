@@ -19,7 +19,7 @@ public class DisplayScript : MonoBehaviour
 
         //pipesPassedTmp = GameObject.Find("PassedTMP").GetComponent<TMPro.TextMeshProUGUI>();
 
-        vitalityIndicator.fillAmount = 1f;
+        vitalityIndicator.fillAmount = GameState.vitality;
         StartCoroutine("vitalityReduce");
         gameTime = 0;
     }
@@ -39,6 +39,8 @@ public class DisplayScript : MonoBehaviour
         clock.text = $"{hour:00}:{minute:00}:{second:00}.{decisecond:0}";
 
         pipesPassedTmp.text = GameState.pipesPassed.ToString();
+
+        vitalityIndicator.fillAmount = GameState.vitality;
     }
     IEnumerator vitalityReduce() 
     {

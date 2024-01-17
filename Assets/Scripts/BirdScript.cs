@@ -23,9 +23,9 @@ public class BirdScript : MonoBehaviour
         //body.AddForce(Vector2.right);
         if (Input.GetKeyDown(KeyCode.Space)) // 
         {
-            body.AddForce(Vector2.up * forceFactor);
+            body.AddForce(Vector2.up * Time.timeScale * forceFactor);
         }
-        if (Input.GetKey(KeyCode.W)) // 
+        if (Input.GetKey(KeyCode.W) && GameState.isWKeyEnabled) // 
         {
             body.AddForce(continualForceFactor * Time.deltaTime * Vector2.up);
         }
@@ -35,9 +35,22 @@ public class BirdScript : MonoBehaviour
     {
         //Debug.Log("Collision detected" + collision.gameObject.name);
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.Log("Trigger detected: " + collision.gameObject.name);
+        Transform parent = other.gameObject.transform.parent;
+        if (parent != null && parent.gameObject.CompareTag("Pipe"))
+        {
+            //todo game over
+        }
+        else
+        {
+            if (other.gameObject.CompareTag("Food"))
+            {
+                GameState.vitality = 1;
+                Destroy(other.gameObject);
+            }
+        }
     }
     private void OnTriggerExit2D(Collider2D other)
     {

@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class SpawnPointScript : MonoBehaviour
 {
-    [SerializeField] private GameObject[] pipePrefabs;
-    private float pipeSpawnPeriod = 2f;     // 
-    private float pipeCountdown;            //
+    [SerializeField]
+    private GameObject[] pipePrefabs;
+    //private float pipeSpawnPeriod = 2f;     // 
+    [SerializeField]
+    private GameObject foodPrefab;
+    // private float pipeSpawnPeriod = 4f;
+    private float pipeCountdown;            // 
+    private float foodCountdown;
     void Start()
     {
-        pipeCountdown = pipeSpawnPeriod;
+        pipeCountdown = GameState.pipesPeriod;
+        foodCountdown = pipeCountdown / 2f;
         SpawnPipe();
     }
 
@@ -18,14 +24,38 @@ public class SpawnPointScript : MonoBehaviour
         pipeCountdown -= Time.deltaTime;
         if (pipeCountdown <= 0)
         {
-            pipeCountdown = pipeSpawnPeriod;
+            //pipeCountdown = pipeSpawnPeriod;
+            pipeCountdown = GameState.pipesPeriod;
+            foodCountdown = pipeCountdown / 2f;
             SpawnPipe();
+        }
+        if (foodCountdown > 0)
+        {
+            if (foodCountdown - Time.deltaTime <= 0)
+            {
+                SpawnFood();
+                foodCountdown = 0;
+            }
+            else
+            {
+                foodCountdown -= Time.deltaTime;
+            }
+        }
+    }
+
+    private void SpawnFood()
+    {
+        if (Random.value < GameState.vitalityDifficulty)
+        {
+            var food = GameObject.Instantiate(foodPrefab); // ~ new PipePrefab
+            food.transform.position = this.transform.position + Vector3.up * Random.Range(-4f, 4f);
         }
     }
 
     private void SpawnPipe()
     {
         var pipe = Instantiate(pipePrefabs[Random.Range(0, 3)]);
-        pipe.transform.position = transform.position + Vector3.up * Random.Range(-1.42f, 1.36f);
+        //pipe.transform.position = transform.position + Vector3.up * Random.Range(-1.42f, 1.36f);
+        pipe.transform.position = transform.position + Vector3.up * Random.Range(-1.2f, 1.1f);
     }
 }
